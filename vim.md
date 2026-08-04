@@ -98,11 +98,11 @@ ma                 set mark "a" at cursor
 
 ## Useful one-liners
 ```bash
-vim +42 file.txt                     # open file, cursor at line 42
-vim +/pattern file.txt                 # open file, cursor at first match
-vim -d file1 file2                       # diff mode between two files
-vimdiff file1 file2                        # same as above
-vim -R file.txt                              # open read-only
+vim +42 file.txt        # open file, cursor at line 42
+vim +/pattern file.txt  # open file, cursor at first match
+vim -d file1 file2      # diff mode between two files
+vimdiff file1 file2     # same as above
+vim -R file.txt         # open read-only
 ```
 
 ## Config essentials (~/.vimrc)

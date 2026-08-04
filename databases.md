@@ -4,7 +4,7 @@
 ```bash
 psql -U user -d dbname -h localhost -p 5432
 mysql -u user -p -h localhost -D dbname
-psql "postgresql://user:pass@host:5432/dbname"       # connection string
+psql "postgresql://user:pass@host:5432/dbname"  # connection string
 ```
 
 ## Postgres (psql) meta-commands
@@ -61,8 +61,8 @@ CREATE INDEX idx_users_email ON users(email);
 ## Backup & restore
 ```bash
 # Postgres
-pg_dump -U user -d dbname -F c -f backup.dump     # custom format (compressed)
-pg_dump -U user -d dbname > backup.sql              # plain SQL
+pg_dump -U user -d dbname -F c -f backup.dump  # custom format (compressed)
+pg_dump -U user -d dbname > backup.sql         # plain SQL
 pg_restore -U user -d dbname backup.dump
 psql -U user -d dbname < backup.sql
 
@@ -104,8 +104,8 @@ SELECT table_schema, ROUND(SUM(data_length+index_length)/1024/1024,1) AS mb
 
 ## Useful one-liners
 ```bash
-psql -U user -d dbname -c "SELECT COUNT(*) FROM users;"     # run inline query, no prompt
-psql -U user -d dbname -c "\copy users TO 'users.csv' CSV HEADER"   # export to CSV
-mysql -u user -p -e "SELECT * FROM users LIMIT 5" dbname       # inline query, MySQL
+psql -U user -d dbname -c "SELECT COUNT(*) FROM users;"                         # run inline query, no prompt
+psql -U user -d dbname -c "\copy users TO 'users.csv' CSV HEADER"               # export to CSV
+mysql -u user -p -e "SELECT * FROM users LIMIT 5" dbname                        # inline query, MySQL
 watch -n2 "psql -U user -d dbname -c 'SELECT count(*) FROM pg_stat_activity;'"  # monitor conns
 ```

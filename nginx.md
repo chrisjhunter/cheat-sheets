@@ -5,17 +5,17 @@
 sudo systemctl start nginx
 sudo systemctl stop nginx
 sudo systemctl restart nginx
-sudo systemctl reload nginx        # reload config without dropping connections
-sudo nginx -t                       # test config syntax before reloading
-sudo nginx -s reload                # alternative reload method
+sudo systemctl reload nginx  # reload config without dropping connections
+sudo nginx -t                # test config syntax before reloading
+sudo nginx -s reload         # alternative reload method
 sudo systemctl status nginx
 ```
 
 ## Key file locations (Debian/Ubuntu)
 ```
-/etc/nginx/nginx.conf              # main config
-/etc/nginx/sites-available/        # available server blocks
-/etc/nginx/sites-enabled/          # symlinked = active
+/etc/nginx/nginx.conf        # main config
+/etc/nginx/sites-available/  # available server blocks
+/etc/nginx/sites-enabled/    # symlinked = active
 /var/log/nginx/access.log
 /var/log/nginx/error.log
 ```
@@ -70,18 +70,18 @@ server {
 server {
     listen 80;
     server_name example.com;
-    return 301 https://$host$request_uri;   # redirect HTTP -> HTTPS
+    return 301 https://$host$request_uri;  # redirect HTTP -> HTTPS
 }
 ```
 ```bash
-sudo certbot --nginx -d example.com               # obtain + auto-configure cert
-sudo certbot renew --dry-run                        # test renewal
+sudo certbot --nginx -d example.com  # obtain + auto-configure cert
+sudo certbot renew --dry-run         # test renewal
 ```
 
 ## Load balancing
 ```nginx
 upstream backend {
-    least_conn;                       # or default round-robin, ip_hash
+    least_conn;  # or default round-robin, ip_hash
     server 10.0.0.1:8080;
     server 10.0.0.2:8080;
     server 10.0.0.3:8080 backup;
@@ -123,12 +123,12 @@ server {
 
 ## Useful one-liners
 ```bash
-sudo nginx -T                                            # dump full effective config
+sudo nginx -T                                                                  # dump full effective config
 tail -f /var/log/nginx/access.log
 tail -f /var/log/nginx/error.log
 awk '{print $1}' /var/log/nginx/access.log | sort | uniq -c | sort -rn | head  # top IPs
 awk '{print $7}' /var/log/nginx/access.log | sort | uniq -c | sort -rn | head  # top requested paths
-grep " 5[0-9][0-9] " /var/log/nginx/access.log                                  # 5xx errors
-curl -I http://localhost                                                          # quick local health check
-sudo lsof -i :80                                                                    # what's using port 80
+grep " 5[0-9][0-9] " /var/log/nginx/access.log                                 # 5xx errors
+curl -I http://localhost                                                       # quick local health check
+sudo lsof -i :80                                                               # what's using port 80
 ```

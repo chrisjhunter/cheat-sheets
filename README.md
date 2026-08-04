@@ -6,7 +6,7 @@ A personal collection of quick-reference cheat sheets for common CLI tools and i
 
 ### CLI tools
 - [Bash](bash.md)
-- [Git](git.md)
+- [Git](git.md) ([workflows](git-workflows.md))
 - [grep](grep.md)
 - [sed](sed.md)
 - [awk](awk.md)
@@ -16,6 +16,9 @@ A personal collection of quick-reference cheat sheets for common CLI tools and i
 - [jq](jq.md)
 - [Vim](vim.md)
 - [OpenSSL / TLS](openssl.md)
+- [GNU parallel](parallel.md)
+- [Taskwarrior & Timewarrior](taskwarrior.md)
+- [Go](go.md)
 
 ### Infra & platforms
 - [Docker](docker.md)
@@ -40,6 +43,7 @@ A personal collection of quick-reference cheat sheets for common CLI tools and i
 
 ### Reference
 - [Important Numbers](numbers.md) — powers of 2, CIDR blocks, nines of uptime, ports, HTTP/exit codes, and more
+- [Temp Files & Scratch Space](tmpfiles.md) — mktemp, cleanup traps, atomic writes, and why
 
 ## Usage
 
