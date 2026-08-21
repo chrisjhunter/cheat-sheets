@@ -13,6 +13,7 @@ A personal collection of quick-reference cheat sheets for common CLI tools and i
 - [SSH](ssh.md)
 - [tmux](tmux.md)
 - [curl](curl.md)
+- [Netcat (nc)](netcat.md)
 - [jq](jq.md)
 - [Vim](vim.md)
 - [OpenSSL / TLS](openssl.md)
@@ -32,6 +33,7 @@ A personal collection of quick-reference cheat sheets for common CLI tools and i
 - [Networking](networking.md)
 - [Databases (Postgres / MySQL)](databases.md)
 - [AWS CLI](aws-cli.md)
+- [B2 CLI](b2.md) — Backblaze B2 cloud storage
 - [Prometheus / PromQL](prometheus.md)
 
 ### Sysadmin / OS-specific
