@@ -46,7 +46,7 @@ pgrep -f nginx              # find PIDs by name/pattern
 pkill -f nginx              # kill by name/pattern
 kill -15 1234               # graceful terminate (SIGTERM)
 kill -9 1234                # force kill (SIGKILL)
-nice -n 10 cmd              # run with lower priority
+nice -n 10 cmd              # run with lower priority (see resource-control.md for the full toolkit)
 renice -n 5 -p 1234         # change priority of running process
 nohup cmd &                 # survive terminal close
 disown -h %1

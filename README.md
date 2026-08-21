@@ -38,6 +38,7 @@ A personal collection of quick-reference cheat sheets for common CLI tools and i
 
 ### Sysadmin / OS-specific
 - [General Sysadmin](sysadmin.md)
+- [Resource Control](resource-control.md) — nice, ionice, cgroups/systemd-run, taskset, cpulimit, ulimit, timeout
 - [Red Hat / RHEL / Fedora](redhat.md)
 - [Debian / Ubuntu](debian.md)
 - [FreeBSD](freebsd.md)
