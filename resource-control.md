@@ -7,7 +7,7 @@ batch job (Overviewer map renders) alongside a live Minecraft server on a
 
 ## The quick combo
 ```bash
-nice -n 19 ionice -c 3 cmd args...    # lowest CPU priority + idle I/O class
+nice -n 19 ionice -c 3 cmd args...  # lowest CPU priority + idle I/O class
 ```
 This is usually enough: cap CPU niceness to the max (19, lowest priority)
 and I/O to the "idle" class (only gets disk time when nothing else wants
@@ -16,11 +16,11 @@ something latency-sensitive (a game server, a database, a web server).
 
 ## nice / renice — CPU scheduling priority
 ```bash
-nice -n 19 cmd                # start a new process at lowest priority (-20 highest, 19 lowest)
-nice -n 10 cmd                 # milder deprioritization
-renice -n 15 -p 1234           # change priority of an already-running PID
-renice -n 15 -g 5678            # by process group
-ps -o pid,ni,cmd -p 1234        # check a process's current niceness (NI column)
+nice -n 19 cmd            # start a new process at lowest priority (-20 highest, 19 lowest)
+nice -n 10 cmd            # milder deprioritization
+renice -n 15 -p 1234      # change priority of an already-running PID
+renice -n 15 -g 5678      # by process group
+ps -o pid,ni,cmd -p 1234  # check a process's current niceness (NI column)
 ```
 Only affects CPU scheduling — a niced process still competes fully for
 memory and disk I/O unless you also handle those (see below). Regular
@@ -29,18 +29,18 @@ without extra privileges.
 
 ## ionice — disk I/O scheduling class
 ```bash
-ionice -c 3 cmd                     # idle class: only runs when disk is otherwise free
-ionice -c 2 -n 7 cmd                  # best-effort class, lowest priority within it (0-7)
-ionice -c 1 -n 0 cmd                   # realtime class, highest prio (needs root, rarely appropriate)
-ionice -p 1234                          # check a running process's I/O class
-ionice -c 3 -p 1234                      # apply idle I/O class to an already-running PID
+ionice -c 3 cmd       # idle class: only runs when disk is otherwise free
+ionice -c 2 -n 7 cmd  # best-effort class, lowest priority within it (0-7)
+ionice -c 1 -n 0 cmd  # realtime class, highest prio (needs root, rarely appropriate)
+ionice -p 1234        # check a running process's I/O class
+ionice -c 3 -p 1234   # apply idle I/O class to an already-running PID
 ```
 Only has real effect under I/O schedulers that honor it (CFQ historically;
 on modern kernels with `mq-deadline`/`bfq`, effect varies — `bfq` respects
 it reasonably well, `mq-deadline` mostly ignores priority). Check the
 current scheduler:
 ```bash
-cat /sys/block/sda/queue/scheduler   # bracketed value is active
+cat /sys/block/sda/queue/scheduler  # bracketed value is active
 ```
 
 ## cgroups v2 — hard resource caps, not just scheduling hints
@@ -55,11 +55,11 @@ systemd-run --scope -p CPUQuota=50% -p MemoryMax=512M cmd args...
 systemd-run --scope -p CPUQuota=50% -p IOReadBandwidthMax="/dev/sda 10M" cmd
 
 # Deprioritize I/O relative to everything else instead of a hard cap
-systemd-run --scope -p IOWeight=10 cmd    # 1-10000, default 100
+systemd-run --scope -p IOWeight=10 cmd  # 1-10000, default 100
 
 # Inspect what's actually applied
 systemctl status run-<id>.scope
-systemd-cgtop                              # live view of cgroup resource usage
+systemd-cgtop  # live view of cgroup resource usage
 ```
 For a long-running service instead of a one-off command, the same
 properties go in the unit file (`CPUQuota=`, `MemoryMax=`, `IOWeight=`
@@ -71,16 +71,16 @@ Doesn't limit *how much* CPU a process uses, just *which* cores it's
 allowed to run on — useful to keep a batch job off the cores your
 latency-sensitive process depends on, on a multi-core box.
 ```bash
-taskset -c 2,3 cmd                  # run only on cores 2 and 3
-taskset -cp 0,1 1234                 # restrict an existing PID to cores 0-1
-taskset -cp 1234                      # check current affinity
-nproc                                  # how many cores you actually have
+taskset -c 2,3 cmd    # run only on cores 2 and 3
+taskset -cp 0,1 1234  # restrict an existing PID to cores 0-1
+taskset -cp 1234      # check current affinity
+nproc                 # how many cores you actually have
 ```
 
 ## cpulimit — throttle an already-running process's CPU %
 ```bash
-cpulimit -p 1234 -l 50               # cap PID 1234 to 50% of one core
-cpulimit -e java -l 200                # cap by process name instead of PID
+cpulimit -p 1234 -l 50   # cap PID 1234 to 50% of one core
+cpulimit -e java -l 200  # cap by process name instead of PID
 ```
 Different from `nice`: this enforces an actual ceiling (via SIGSTOP/SIGCONT
 cycling) rather than just deprioritizing under contention — the process
@@ -89,28 +89,28 @@ default on most distros (`apt install cpulimit` / `brew install cpulimit`).
 
 ## ulimit / prlimit — per-process resource limits
 ```bash
-ulimit -a                          # show all current limits for this shell
+ulimit -a                           # show all current limits for this shell
 ulimit -v 2097152                   # cap virtual memory to ~2GB (KB) for this shell + children
-ulimit -n 4096                       # raise open-file-descriptor limit
-prlimit --pid 1234                    # show limits for a running process
-prlimit --pid 1234 --as=2147483648     # set address-space (memory) limit on a running PID
+ulimit -n 4096                      # raise open-file-descriptor limit
+prlimit --pid 1234                  # show limits for a running process
+prlimit --pid 1234 --as=2147483648  # set address-space (memory) limit on a running PID
 ```
 `ulimit` only affects the current shell and anything it spawns afterward —
 set it right before launching the command, in the same shell/script.
 
 ## timeout — bound how long something is allowed to run
 ```bash
-timeout 300 cmd                    # kill after 5 minutes if still running
-timeout -s SIGKILL 60 cmd           # force-kill (not just SIGTERM) after 60s
-timeout --foreground 300 cmd         # needed if cmd reads from the terminal
+timeout 300 cmd               # kill after 5 minutes if still running
+timeout -s SIGKILL 60 cmd     # force-kill (not just SIGTERM) after 60s
+timeout --foreground 300 cmd  # needed if cmd reads from the terminal
 ```
 Good insurance for any batch job with no natural end condition, so a
 stuck run can't monopolize resources indefinitely.
 
 ## Bandwidth throttling (network I/O)
 ```bash
-trickle -d 500 -u 100 cmd            # cap download to 500KB/s, upload to 100KB/s (per-app, userspace)
-wondershaper eth0 5000 1000            # cap an interface: 5000kbit/s down, 1000kbit/s up (system-wide)
+trickle -d 500 -u 100 cmd    # cap download to 500KB/s, upload to 100KB/s (per-app, userspace)
+wondershaper eth0 5000 1000  # cap an interface: 5000kbit/s down, 1000kbit/s up (system-wide)
 ```
 `trickle` wraps a single command; `wondershaper`/`tc` shape a whole
 interface. Neither is installed by default on most distros.
